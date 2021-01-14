@@ -1,0 +1,8 @@
+C:\DevSSD\VSRepo\AcApi\AcApi\obj\Docker\publish\AcApi.exe
+C:\DevSSD\VSRepo\AcApi\AcApi\obj\Docker\publish\appsettings.Development.json
+C:\DevSSD\VSRepo\AcApi\AcApi\obj\Docker\publish\appsettings.json
+C:\DevSSD\VSRepo\AcApi\AcApi\obj\Docker\publish\AcApi.dll
+C:\DevSSD\VSRepo\AcApi\AcApi\obj\Docker\publish\AcApi.deps.json
+C:\DevSSD\VSRepo\AcApi\AcApi\obj\Docker\publish\AcApi.runtimeconfig.json
+C:\DevSSD\VSRepo\AcApi\AcApi\obj\Docker\publish\AcApi.pdb
+C:\DevSSD\VSRepo\AcApi\AcApi\obj\Docker\publish\Newtonsoft.Json.dll

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "YicicdL8McqXZdJH7JKJ6xSiQGaRX8YUQZsFWh0G1u8+rhE2vR3PSadvkjHpzl/0GmoOQEio7UrI4Cgskb0ybQ==",
+  "success": true,
+  "projectFilePath": "C:\\DevSSD\\VSRepo\\AcApi\\AcApi\\AcApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\thoma\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.10.9\\microsoft.visualstudio.azure.containers.tools.targets.1.10.9.nupkg.sha512",
+    "C:\\Users\\thoma\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
