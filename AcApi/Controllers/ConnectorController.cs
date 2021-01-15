@@ -15,13 +15,15 @@ namespace AcApi.Controllers
         private readonly ILogger<ConnectorController> _logger;
         private readonly IAccessControl _accessControl;
         private readonly ISnapshot _snapshot;
+        private readonly IStream _stream;
 
         public int m_UserID = -1;
 
-        public ConnectorController(ILogger<ConnectorController> logger, IAccessControl accessControl, ISnapshot snapshot)
+        public ConnectorController(ILogger<ConnectorController> logger, IAccessControl accessControl, ISnapshot snapshot, IStream stream)
         {
             _accessControl = accessControl;
             _snapshot = snapshot;
+            _stream = stream;
         }
 
         [HttpPost]
@@ -53,6 +55,12 @@ namespace AcApi.Controllers
                 m_UserID = lUserID;
                 Debug.WriteLine("Login efetuado, tentanto capturar imagem.");
                 return _snapshot.GetPicture(m_UserID);
+            }
+            if (lUserID >= 0 && Login.Function == FunctionEnum.Stream)
+            {
+                m_UserID = lUserID;
+                Debug.WriteLine("Login efetuado, tentanto iniciar link.");
+                return _stream.GetStream(m_UserID);
             }
             else
             {
