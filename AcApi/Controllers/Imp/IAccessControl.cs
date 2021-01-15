@@ -14,7 +14,7 @@ namespace AcApi.Controllers.Imp
         private string MinorType = null;
         private string MajorType = null;
         private string CsTemp = null;
-        private int validUntil = 1;
+        private int validUntil = 5;
         public int m_lGetAcsEventHandle = -1;
 
 
@@ -62,10 +62,14 @@ namespace AcApi.Controllers.Imp
             {
                 Marshal.FreeHGlobal(ptrCond);
                 Debug.WriteLine("NET_DVR_StartRemoteConfig FAIL, ERROR CODE" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error");
+                CHCNetSDK.NET_DVR_Logout(m_UserID);
+                Debug.WriteLine($"Successful to logout user {0} ", m_UserID);
                 return null;
             }
             var list = ProcessEvent();
             Marshal.FreeHGlobal(ptrCond);
+            CHCNetSDK.NET_DVR_Logout(m_UserID);
+            Debug.WriteLine($"Successful to logout user {0} ", m_UserID);
             return list;
         }
 

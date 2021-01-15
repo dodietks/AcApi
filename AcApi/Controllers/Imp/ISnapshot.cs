@@ -6,16 +6,13 @@ namespace AcApi.Controllers.Imp
     public class ISnapshot
     {
         int channel = 1;
-        public uint iLastErr = 0;
-        string sJpegPicFileName;
+        public uint lastError = 0;
+        string imagePath;
 
-        private string str;
         public object GetPicture(int m_UserID)
         {
-        
-
-        //Í¼Æ¬±£´æÂ·¾¶ºÍÎÄ¼þÃû the path and file name to save
-        sJpegPicFileName = "C:/temp/JPEG_test.jpg";
+            //Í¼Æ¬±£´æÂ·¾¶ºÍÎÄ¼þÃû the path and file name to save
+            imagePath = "C:/temp/JPEG_test.jpg";
         
         int lChannel = channel; //Í¨µÀºÅ Channel number
         
@@ -24,17 +21,19 @@ namespace AcApi.Controllers.Imp
         lpJpegPara.wPicSize = 0xff; //×¥Í¼·Ö±æÂÊ Picture size: 2- 4CIF£¬0xff- Auto(Ê¹ÓÃµ±Ç°ÂëÁ÷·Ö±æÂÊ)£¬×¥Í¼·Ö±æÂÊÐèÒªÉè±¸Ö§³Ö£¬¸ü¶àÈ¡ÖµÇë²Î¿¼SDKÎÄµµ
         
         //JPEG×¥Í¼ Capture a JPEG picture
-        if (!CHCNetSDK.NET_DVR_CaptureJPEGPicture(m_UserID, lChannel, ref lpJpegPara, sJpegPicFileName))
+        if (!CHCNetSDK.NET_DVR_CaptureJPEGPicture(m_UserID, lChannel, ref lpJpegPara, imagePath))
         {
-            iLastErr = CHCNetSDK.NET_DVR_GetLastError();
-            str = "NET_DVR_CaptureJPEGPicture failed, error code= " + iLastErr;
-            Debug.WriteLine(str);
+            lastError = CHCNetSDK.NET_DVR_GetLastError();
+            Debug.WriteLine($"NET_DVR_CaptureJPEGPicture failed, error code= {0}", lastError);
+            CHCNetSDK.NET_DVR_Logout(m_UserID);
+            Debug.WriteLine($"Successful to logout user {0} ", m_UserID);
             return null;
         }
         else
         {
-            str = "Successful to capture the JPEG file and the saved file is " + sJpegPicFileName;
-            Debug.WriteLine(str);
+            Debug.WriteLine($"Successful to capture the JPEG file and the saved file is {0} ", imagePath);
+            CHCNetSDK.NET_DVR_Logout(m_UserID);
+            Debug.WriteLine($"Successful to logout user {0} ", m_UserID);
         }
         return null;
         }

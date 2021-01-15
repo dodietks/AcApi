@@ -428,6 +428,10 @@ namespace AcApi.Utils
         //JPEG×¥Í¼µ½ÄÚ´æ
         [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
         public static extern bool NET_DVR_CaptureJPEGPicture_NEW(int lUserID, int lChannel, ref NET_DVR_JPEGPARA lpJpegPara, byte[] sJpegPicBuffer, uint dwPicSize, ref uint lpSizeReturned);
+
+        [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
+        public static extern bool NET_DVR_Logout(int iUserID);
+
         #endregion
 
         #region HCNetSDK.dll structure definition

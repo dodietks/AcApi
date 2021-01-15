@@ -41,7 +41,6 @@ namespace AcApi.Controllers
             ushort.TryParse(Login.Port, out struLoginInfo.wPort);
 
             int lUserID = -1;
-
             lUserID = CHCNetSDK.NET_DVR_Login_V40(ref struLoginInfo, ref struDeviceInfoV40);
             if (lUserID >= 0 && Login.Function == FunctionEnum.AccessInfo)
             {
@@ -63,7 +62,7 @@ namespace AcApi.Controllers
                     Debug.WriteLine("user name or password error!");
                     if (1 == struDeviceInfoV40.bySupportLock)
                     {
-                        string strTemp1 = string.Format("Left {0} try opportunity", struDeviceInfoV40.byRetryLoginTime);
+                        string strTemp1 = string.Format($"Left {0} try opportunity", struDeviceInfoV40.byRetryLoginTime);
                         Debug.WriteLine(strTemp1);
                     }
                 }
@@ -71,7 +70,7 @@ namespace AcApi.Controllers
                 {
                     if (1 == struDeviceInfoV40.bySupportLock)
                     {
-                        string strTemp1 = string.Format("user is locked, the remaining lock time is {0}", struDeviceInfoV40.dwSurplusLockTime);
+                        string strTemp1 = string.Format($"user is locked, the remaining lock time is {0}", struDeviceInfoV40.dwSurplusLockTime);
                     }
                 }
                 else
