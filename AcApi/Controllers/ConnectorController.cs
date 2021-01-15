@@ -4,12 +4,7 @@ using AcApi.Models.Enum;
 using AcApi.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace AcApi.Controllers
 {
@@ -18,13 +13,15 @@ namespace AcApi.Controllers
     public class ConnectorController : ControllerBase
     {
         private readonly ILogger<ConnectorController> _logger;
-        private readonly IAccessControl _accessControlImp;
+        private readonly IAccessControl _accessControl;
+        private readonly ISnapshot _snapshot;
 
         public int m_UserID = -1;
 
-        public ConnectorController(ILogger<ConnectorController> logger, IAccessControl accessControlImp)
+        public ConnectorController(ILogger<ConnectorController> logger, IAccessControl accessControl, ISnapshot snapshot)
         {
-            _accessControlImp = accessControlImp;
+            _accessControl = accessControl;
+            _snapshot = snapshot;
         }
 
         [HttpPost]
@@ -49,8 +46,14 @@ namespace AcApi.Controllers
             if (lUserID >= 0 && Login.Function == FunctionEnum.AccessInfo)
             {
                 m_UserID = lUserID;
-                Debug.WriteLine("Login efetuado!");
-                return _accessControlImp.GetACSEvent(m_UserID);
+                Debug.WriteLine("Login efetuado, tentando recuperar eventos de acesso.");
+                return _accessControl.GetACSEvent(m_UserID);
+            }
+            if (lUserID >= 0 && Login.Function == FunctionEnum.Snapshot)
+            {
+                m_UserID = lUserID;
+                Debug.WriteLine("Login efetuado, tentanto capturar imagem.");
+                return _snapshot.GetPicture(m_UserID);
             }
             else
             {
