@@ -1,82 +1,24 @@
 ﻿using AcApi.Models;
 using AcApi.Utils;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace AcApi.Controllers
+namespace AcApi.Controllers.Imp
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class LoginController : ControllerBase
+    public class IAccessControl
     {
-        private readonly ILogger<LoginController> _logger;
-
-        public int m_UserID = -1;
-        private string CsTemp = null;
         private int m_lLogNum = 0;
         private string MinorType = null;
         private string MajorType = null;
-        public int m_lGetAcsEventHandle = -1;
+        private string CsTemp = null;
         private int validUntil = 1;
+        public int m_lGetAcsEventHandle = -1;
 
-        [HttpPost]
-        public object Login(Login Login)
-        {
-            CHCNetSDK.NET_DVR_Init();
-            CHCNetSDK.NET_DVR_SetLogToFile(3, "./SdkLog/", true);
-            CHCNetSDK.NET_DVR_USER_LOGIN_INFO struLoginInfo = new CHCNetSDK.NET_DVR_USER_LOGIN_INFO();
-            CHCNetSDK.NET_DVR_DEVICEINFO_V40 struDeviceInfoV40 = new CHCNetSDK.NET_DVR_DEVICEINFO_V40();
-            struDeviceInfoV40.struDeviceV30.sSerialNumber = new byte[CHCNetSDK.SERIALNO_LEN];
 
-            struLoginInfo.sDeviceAddress = Login.ip;
-            struLoginInfo.sUserName = Login.name;
-            struLoginInfo.sPassword = Login.password;
-            struLoginInfo.byLoginMode = 0;
-            struLoginInfo.byVerifyMode = 0;
-            ushort.TryParse(Login.port, out struLoginInfo.wPort);
-
-            int lUserID = -1;
-            lUserID = CHCNetSDK.NET_DVR_Login_V40(ref struLoginInfo, ref struDeviceInfoV40);
-            if (lUserID >= 0 && Login.function == 1)
-            {
-                m_UserID = lUserID;
-                Debug.WriteLine("Login efetuado!");
-                return Read();
-            }
-            else
-            {
-                uint nErr = CHCNetSDK.NET_DVR_GetLastError();
-                if (nErr == CHCNetSDK.NET_DVR_PASSWORD_ERROR)
-                {
-                    Debug.WriteLine("user name or password error!");
-                    if (1 == struDeviceInfoV40.bySupportLock)
-                    {
-                        string strTemp1 = string.Format("Left {0} try opportunity", struDeviceInfoV40.byRetryLoginTime);
-                        Debug.WriteLine(strTemp1);
-                    }
-                }
-                else if (nErr == CHCNetSDK.NET_DVR_USER_LOCKED)
-                {
-                    if (1 == struDeviceInfoV40.bySupportLock)
-                    {
-                        string strTemp1 = string.Format("user is locked, the remaining lock time is {0}", struDeviceInfoV40.dwSurplusLockTime);
-                    }
-                }
-                else
-                {
-                    Debug.WriteLine("net error or dvr is busy!");
-                }
-            }
-            return null;
-        }
-
-        public object Read()
+        public object GetACSEvent(int m_UserID)
         {
             m_lLogNum = 0;
             var startDate = DateTime.Now;
@@ -111,7 +53,7 @@ namespace AcApi.Controllers
             struCond.szMonitorID = "";
             struCond.wInductiveEventType = 65535;
 
-          
+
             uint dwSize = struCond.dwSize;
             IntPtr ptrCond = Marshal.AllocHGlobal((int)dwSize);
             Marshal.StructureToPtr(struCond, ptrCond, false);
@@ -123,7 +65,7 @@ namespace AcApi.Controllers
                 return null;
             }
             var list = ProcessEvent();
-            Marshal.FreeHGlobal(ptrCond);            
+            Marshal.FreeHGlobal(ptrCond);
             return list;
         }
 
@@ -181,8 +123,6 @@ namespace AcApi.Controllers
 
             return Cards;
         }
-
-
 
         private void AlarmMinorTypeMap(ref CHCNetSDK.NET_DVR_ACS_EVENT_CFG struEventCfg)
         {

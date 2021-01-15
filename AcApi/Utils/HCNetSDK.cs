@@ -599,6 +599,15 @@ namespace AcApi.Utils
             }
         }
 
+        public struct NET_DVR_JPEGPARA
+        {
+            /*×¢Òâ£ºµ±Í¼ÏñÑ¹Ëõ·Ö±æÂÊÎªVGAÊ±£¬Ö§³Ö0=CIF, 1=QCIF, 2=D1×¥Í¼£¬
+	        µ±·Ö±æÂÊÎª3=UXGA(1600x1200), 4=SVGA(800x600), 5=HD720p(1280x720),6=VGA,7=XVGA, 8=HD900p
+	        ½öÖ§³Öµ±Ç°·Ö±æÂÊµÄ×¥Í¼*/
+            public ushort wPicSize;/* 0=CIF, 1=QCIF, 2=D1 3=UXGA(1600x1200), 4=SVGA(800x600), 5=HD720p(1280x720),6=VGA*/
+            public ushort wPicQuality;/* Í¼Æ¬ÖÊÁ¿ÏµÊý 0-×îºÃ 1-½ÏºÃ 2-Ò»°ã */
+        }
+
         [StructLayoutAttribute(LayoutKind.Sequential)]
         public struct NET_DVR_ACS_EVENT_DETAIL
         {
