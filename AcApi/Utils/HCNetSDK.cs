@@ -364,10 +364,10 @@ namespace AcApi.Utils
         [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_StartRemoteConfig(int lUserID, int dwCommand, IntPtr lpInBuffer, int dwInBufferLen, RemoteConfigCallback cbStateCallback, IntPtr pUserData);
 
-        [DllImport(@"..\bin\HCNetSDK.dll")]
+        [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
         public static extern Int32 NET_DVR_RealPlay(int iUserID, ref NET_DVR_CLIENTINFO lpClientInfo);
 
-        [DllImport(@"..\bin\HCNetSDK.dll")]
+        [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
         public static extern Int32 NET_SDK_RealPlay(int iUserLogID, ref NET_DVR_CLIENTINFO lpDVRClientInfo);
         /*********************************************************
 		Function:	REALDATACALLBACK
@@ -381,7 +381,7 @@ namespace AcApi.Utils
 		Return:	void
 		**********************************************************/
         public delegate void REALDATACALLBACK(Int32 lRealHandle, UInt32 dwDataType, IntPtr pBuffer, UInt32 dwBufSize, IntPtr pUser);
-        [DllImport(@"..\bin\HCNetSDK.dll")]
+        [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
 
         /*********************************************************
         Function:	NET_DVR_RealPlay_V30
@@ -406,10 +406,10 @@ namespace AcApi.Utils
         Output:	
         Return:	1±íÊ¾Ê§°Ü£¬ÆäËûÖµ×÷ÎªNET_DVR_StopRealPlayµÈº¯ÊýµÄ¾ä±ú²ÎÊý
         **********************************************************/
-        [DllImport(@"..\bin\HCNetSDK.dll")]
+        [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
         public static extern int NET_DVR_RealPlay_V40(int iUserID, ref NET_DVR_PREVIEWINFO lpPreviewInfo, REALDATACALLBACK fRealDataCallBack_V30, IntPtr pUser);
 
-        // [DllImport(@"..\bin\HCNetSDK.dll")]
+        // [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
         // public static extern int NET_DVR_GetRealPlayerIndex(int lRealHandle);
         /*********************************************************
 		Function:	NET_DVR_StopRealPlay
@@ -418,8 +418,16 @@ namespace AcApi.Utils
 		Output:	
 		Return:	
 		**********************************************************/
-        [DllImport(@"..\bin\HCNetSDK.dll")]
+        [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
         public static extern bool NET_DVR_StopRealPlay(int iRealHandle);
+
+        //2005-09-15
+        [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
+        public static extern bool NET_DVR_CaptureJPEGPicture(int lUserID, int lChannel, ref NET_DVR_JPEGPARA lpJpegPara, string sPicFileName);
+
+        //JPEG×¥Í¼µ½ÄÚ´æ
+        [DllImport(@"C:\DevSSD\VSRepo\AcApi\AcApi\Utils\lib\HCNetSDK\HCNetSDK.dll")]
+        public static extern bool NET_DVR_CaptureJPEGPicture_NEW(int lUserID, int lChannel, ref NET_DVR_JPEGPARA lpJpegPara, byte[] sJpegPicBuffer, uint dwPicSize, ref uint lpSizeReturned);
         #endregion
 
         #region HCNetSDK.dll structure definition
@@ -597,6 +605,15 @@ namespace AcApi.Utils
                 byEmployeeNo = new byte[CHCNetSDK.NET_SDK_EMPLOYEE_NO_LEN];
                 byRes = new byte[140];
             }
+        }
+
+        public struct NET_DVR_JPEGPARA
+        {
+            /*×¢Òâ£ºµ±Í¼ÏñÑ¹Ëõ·Ö±æÂÊÎªVGAÊ±£¬Ö§³Ö0=CIF, 1=QCIF, 2=D1×¥Í¼£¬
+	        µ±·Ö±æÂÊÎª3=UXGA(1600x1200), 4=SVGA(800x600), 5=HD720p(1280x720),6=VGA,7=XVGA, 8=HD900p
+	        ½öÖ§³Öµ±Ç°·Ö±æÂÊµÄ×¥Í¼*/
+            public ushort wPicSize;/* 0=CIF, 1=QCIF, 2=D1 3=UXGA(1600x1200), 4=SVGA(800x600), 5=HD720p(1280x720),6=VGA*/
+            public ushort wPicQuality;/* Í¼Æ¬ÖÊÁ¿ÏµÊý 0-×îºÃ 1-½ÏºÃ 2-Ò»°ã */
         }
 
         [StructLayoutAttribute(LayoutKind.Sequential)]

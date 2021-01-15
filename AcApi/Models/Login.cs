@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AcApi.Models.Enum;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,22 +12,22 @@ namespace AcApi.Models
     {
         [JsonProperty("ip")]
         [Required]
-        public string ip { get; set; }
+        public string Ip { get; set; }
 
         [JsonProperty("nome")]
         [Required]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("senha")]
         [Required]
-        public string password { get; set; }
+        public string Password { get; set; }
 
         [JsonProperty("porta")]
         [Required]
-        public string port { get; set; }
+        public string Port { get; set; }
 
         [JsonProperty("funcao")]
         [Required]
-        public int function { get; set; }
+        public FunctionEnum Function { get; set; }
     }
 }
