@@ -7,6 +7,7 @@ namespace AcApi.Models.Enum
     {
         None = 0,
         AccessInfo = 1,
-        Snapshot = 2
+        Snapshot = 2,
+        Stream = 3
     }
 }
