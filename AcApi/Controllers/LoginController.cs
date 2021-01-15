@@ -23,6 +23,7 @@ namespace AcApi.Controllers
         private string MinorType = null;
         private string MajorType = null;
         public int m_lGetAcsEventHandle = -1;
+        private int validUntil = 1;
 
         [HttpPost]
         public object Login(Login Login)
@@ -96,7 +97,7 @@ namespace AcApi.Controllers
             struCond.struStartTime.dwMonth = startDate.Month;
             struCond.struStartTime.dwDay = startDate.Day;
             struCond.struStartTime.dwHour = startDate.Hour;
-            struCond.struStartTime.dwMinute = startDate.Minute - 5;
+            struCond.struStartTime.dwMinute = startDate.Minute - validUntil;
             struCond.struStartTime.dwSecond = startDate.Second;
 
             struCond.struEndTime.dwYear = endDate.Year;
@@ -177,8 +178,6 @@ namespace AcApi.Controllers
             Cards.minorType = CsTemp;
             string LogTime = GetStrLogTime(ref struEventCfg.struTime);
             Cards.dateTime = LogTime;
-
-            //Cards = Cards.OrderBy(s => s.id);
 
             return Cards;
         }
