@@ -21,8 +21,8 @@ namespace AcApi
         {
             services.AddControllers();
             services.AddTransient<IAccessControl, IAccessControl>();
-            services.AddTransient<ISnapshot, ISnapshot > ();
-            services.AddTransient<IStream, IStream> ();
+            services.AddTransient<ISnapshot, ISnapshot>();
+            services.AddTransient<IStream, IStream>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\WeatherForecast.cs" />
     <Compile Remove="Utils\HCNetSDK2.cs" />
   </ItemGroup>
 
