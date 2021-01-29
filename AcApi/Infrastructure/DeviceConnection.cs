@@ -1,9 +1,7 @@
 ﻿using AcApi.Models;
 using AcApi.Utils;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace AcApi.Infrastructure
 {
@@ -17,7 +15,6 @@ namespace AcApi.Infrastructure
             this._loginOptions = loginOptions;
             CHCNetSDK.NET_DVR_Init();
             CHCNetSDK.NET_DVR_SetLogToFile(3, loginOptions.LogPath, true);
-            //this.DoLogin();
         }
 
 
@@ -38,29 +35,32 @@ namespace AcApi.Infrastructure
             _userId = CHCNetSDK.NET_DVR_Login_V40(ref struLoginInfo, ref struDeviceInfoV40);
             if(_userId == -1)
             {
-                throw new Exception("Falha na autenticação!");
+                throw new Exception("Anthentication fail!");
+            }else
+             {
+                 uint nErr = CHCNetSDK.NET_DVR_GetLastError();
+                 if (nErr == CHCNetSDK.NET_DVR_PASSWORD_ERROR)
+                 {
+                     Debug.WriteLine("user name or password error!");
+                     if (1 == struDeviceInfoV40.bySupportLock)
+                     {
+                         string strTemp1 = string.Format($"Left {0} try opportunity", struDeviceInfoV40.byRetryLoginTime);
+                         Debug.WriteLine(strTemp1);
+                     }
+                 }
+                 else if (nErr == CHCNetSDK.NET_DVR_USER_LOCKED)
+                 {
+                     if (1 == struDeviceInfoV40.bySupportLock)
+                     {
+                         string strTemp1 = string.Format($"user is locked, the remaining lock time is {0}", struDeviceInfoV40.dwSurplusLockTime);
+                     }
+                 }
+            else
+            {
+                Debug.WriteLine("net error or dvr is busy!");
+            }
             }
             return _userId;
         }
-
-
-        public void StartRemoteConfig(int loggedUser, CHCNetSDK.NET_DVR_ACS_EVENT_COND struCond)
-        {
-            uint dwSize = struCond.dwSize;
-            IntPtr ptrCond = Marshal.AllocHGlobal((int)dwSize);
-            Marshal.StructureToPtr(struCond, ptrCond, false);
-            int result = CHCNetSDK.NET_DVR_StartRemoteConfig(loggedUser, CHCNetSDK.NET_DVR_GET_ACS_EVENT, ptrCond, (int)dwSize, null, IntPtr.Zero);
-            if (-1 == result)
-            {
-                Marshal.FreeHGlobal(ptrCond);
-                Debug.WriteLine("NET_DVR_StartRemoteConfig FAIL, ERROR CODE" + CHCNetSDK.NET_DVR_GetLastError().ToString(), "Error");
-                CHCNetSDK.NET_DVR_Logout(loggedUser);
-                Debug.WriteLine($"Successful to logout user {0} ", loggedUser);
-                //return new List<CardRead>();
-            }
-            //return result;
-        }
-
-
     }
 }

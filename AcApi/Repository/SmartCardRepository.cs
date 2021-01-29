@@ -12,13 +12,13 @@ namespace AcApi.Controllers
 {
     public class SmartCardRepository
     {
-        private readonly ILogger<Device> _logger;
+        private readonly ILogger<SmartCardRepository> _logger;
         private DeviceConnection _deviceConnection;
 
         private static string MajorType = "Event";
         private static string MinorType = "INVALID_CARD";
 
-        public SmartCardRepository(ILogger<Device> logger, DeviceConnection deviceConnection)
+        public SmartCardRepository(ILogger<SmartCardRepository> logger, DeviceConnection deviceConnection)
         {
             _logger = logger;
             _deviceConnection = deviceConnection;
@@ -27,19 +27,13 @@ namespace AcApi.Controllers
 
         public Object GetLastCard()
         {
-
             int _userID = _deviceConnection.DoLogin();
             Debug.WriteLine("Login efetuado, tentando recuperar eventos de acesso.");
 
             DateTime now = DateTime.Now;
             var result = GetCards(_userID, now.AddMinutes(-10), now);
-            Debug.WriteLine($"Estou em: {0}", result);
-            //if (result.Count == 0)
-            //{
-            //    return null;
-            //}
-
-            //return result[0];
+            Debug.WriteLine($"Estou em: GetLastCard, Resultado: {0}", result);
+            
             return result;
         }
 
