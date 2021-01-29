@@ -1,4 +1,5 @@
-﻿using AcApi.Models;
+﻿using AcApi.Infrastructure;
+using AcApi.Models;
 using AcApi.Utils;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,20 @@ namespace AcApi.Controllers.Imp
 {
     public class IAccessControl
     {
-        private int m_lLogNum = 0;
+        private int m_lLogNum;
         private string MinorType = null;
         private string MajorType = null;
         private string CsTemp = null;
-        private int validUntil = 5;
+        private int validUntil = 10;
         public int m_lGetAcsEventHandle = -1;
 
 
+        public IAccessControl( )
+        {
+        }
         public object GetACSEvent(int m_UserID)
         {
+            
             m_lLogNum = 0;
             var startDate = DateTime.Now;
             var endDate = DateTime.Now;
@@ -29,7 +34,7 @@ namespace AcApi.Controllers.Imp
             struCond.dwSize = (uint)Marshal.SizeOf(struCond);
 
             MajorType = "Event";
-            struCond.dwMajor = GetAcsEventType.ReturnMajorTypeValue(ref MajorType);
+            struCond.dwMajor = GetAcsEventType.ReturnMajorTypeValue(ref MajorType); 
 
             MinorType = "INVALID_CARD";
             struCond.dwMinor = GetAcsEventType.ReturnMinorTypeValue(ref MinorType);
@@ -58,6 +63,10 @@ namespace AcApi.Controllers.Imp
             IntPtr ptrCond = Marshal.AllocHGlobal((int)dwSize);
             Marshal.StructureToPtr(struCond, ptrCond, false);
             m_lGetAcsEventHandle = CHCNetSDK.NET_DVR_StartRemoteConfig(m_UserID, CHCNetSDK.NET_DVR_GET_ACS_EVENT, ptrCond, (int)dwSize, null, IntPtr.Zero);
+            
+            Debug.WriteLine(ptrCond);
+            Debug.WriteLine(struCond);
+            Debug.WriteLine(m_lGetAcsEventHandle);
             if (-1 == m_lGetAcsEventHandle)
             {
                 Marshal.FreeHGlobal(ptrCond);
@@ -115,15 +124,14 @@ namespace AcApi.Controllers.Imp
         public CardRead ShowCardList(ref CHCNetSDK.NET_DVR_ACS_EVENT_CFG struEventCfg)
         {
             CardRead Cards = new CardRead();
-            Cards.id = (++m_lLogNum).ToString();
             string Number = System.Text.Encoding.UTF8.GetString(struEventCfg.struAcsEventInfo.byCardNo);
-            Cards.cardNumber = Number;
+            Cards.CardNumber = Number;
             string Major = ProcessMajorType(ref struEventCfg.dwMajor);
-            Cards.majorType = Major;
+            Cards.MajorType = Major;
             ProcessMinorType(ref struEventCfg);
-            Cards.minorType = CsTemp;
+            Cards.MinorType = CsTemp;
             string LogTime = GetStrLogTime(ref struEventCfg.struTime);
-            Cards.dateTime = LogTime;
+            Cards.DateTimeInString = LogTime;
 
             return Cards;
         }
