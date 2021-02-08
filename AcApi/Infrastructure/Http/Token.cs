@@ -2,10 +2,8 @@
 {
     public class Token
     {
-
         public string Type { get; set; }
         public string Value { get; set; }
-
         public static Token Bearer(string value)
         {
             Token token = new Token();
