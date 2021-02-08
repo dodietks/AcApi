@@ -4,7 +4,6 @@ using AcApi.Models;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,8 +22,9 @@ namespace AcApi.BackgroundServices
 
         Token token = Token.Bearer("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IlVzdcOhcmlvIFBhZHLDo28iLCJuYW1laWQiOiIwIiwiREVGQVVMVF9VU0VSX0FVVEgiOiJ0cnVlIiwicm9sZSI6WyIzNTAiLCIxMDAiLCIxNTAiLCIyMDAiLCIyNTAiXSwibmJmIjoxNjA4NjY5MDQyLCJleHAiOjE5MjQwMjkwNDIsImlhdCI6MTYwODY2OTA0Mn0.3B71wvTArrsm4kBIJAb_J5fZUo1tnehg1XXsR5ArcOE");
         public GetNewEventsService(ILogger<GetNewEventsService> logger,
-                                    SmartCardRepository smartCard,
-                                    IHttpRequest httpRequest, ConfigurationOptions _configuration)
+                                   SmartCardRepository smartCard,
+                                   IHttpRequest httpRequest,
+                                   ConfigurationOptions _configuration)
         {
             _logger = logger;
             smartCardRepository = smartCard;
@@ -39,11 +39,9 @@ namespace AcApi.BackgroundServices
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogDebug("Getting new events in background.");
-
                 var results = _configuration.Gates.Select(x => checkGate(x)).ToList();
 
                 _logger.LogDebug("Waiting all tasks will be done.");
-
                 Task.WhenAll(results).Wait();
 
                 await Countdown();
@@ -60,10 +58,8 @@ namespace AcApi.BackgroundServices
                 await SendEvent(uri, result, token);
                 _logger.LogInformation($"Post content: {result}.");
             }
-
             return Task.CompletedTask;
         }
-
 
         private async Task Countdown()
         {

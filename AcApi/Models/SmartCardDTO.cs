@@ -6,7 +6,6 @@ namespace AcApi.Models
 {
     public class SmartCardDTO
     {
-
         [JsonProperty("Id")]
         [Required]
         public string Id { get; set; }
