@@ -26,20 +26,20 @@ namespace AcApi.Infrastructure.Http
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.Timeout = timeout;
 
-            Logger.LogInformation("Try execute GET requset to {}", url);
+            Logger.LogInformation($"Try execute GET requset to {url}");
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, url))
             {
                 requestMessage.Headers.Authorization = new AuthenticationHeaderValue(token.Type, token.Value);
                 HttpResponseMessage response = client.SendAsync(requestMessage).Result;
-                Logger.LogInformation("GET done {}, try get body", url, response.StatusCode);
+                Logger.LogInformation($"GET done {url}, try get body: {response.StatusCode}");
 
                 String body = response.Content.ReadAsStringAsync().Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    Logger.LogInformation("Succes in POST {}, response is {}", url, body);
+                    Logger.LogInformation($"Succes in POST {url}, response is {body}");
                     return JsonConvert.DeserializeObject<T>(body);
                 }
-                Logger.LogError("Fail on execute GET to {}, status code is {}", url, response.StatusCode, response.Content.ReadAsStringAsync().Result);
+                Logger.LogError($"Fail on execute GET to {url}, status code is {response.StatusCode} and content: {response.Content.ReadAsStringAsync().Result}");
                 return default(T);
             }
         }
@@ -60,10 +60,10 @@ namespace AcApi.Infrastructure.Http
                 String body = response.Content.ReadAsStringAsync().Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    Logger.LogInformation("Succes in POST {}, response is {}", url, body);
+                    Logger.LogInformation($"Succes in POST {url}, response is {body}");
                     return body;
                 }
-                Logger.LogError("Fail on execute GET to {}, status code is {}", url, response.StatusCode, response.Content.ReadAsStringAsync().Result);
+                Logger.LogError($"Fail on execute GET to {url}, status code is {response.StatusCode} and content: {response.Content.ReadAsStringAsync().Result}");
                 return null;
             }
         }

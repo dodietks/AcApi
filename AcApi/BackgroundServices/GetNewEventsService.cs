@@ -14,13 +14,9 @@ namespace AcApi.BackgroundServices
     {
         private readonly ILogger<GetNewEventsService> _logger;
         private readonly SmartCardRepository smartCardRepository;
-        public IHttpRequest HttpRequest { get; set; }
-        private string uri = "http://localhost:61387/api/SmartCard/";
-
         private readonly ConfigurationOptions _configuration;
+        public IHttpRequest HttpRequest { get; set; }
 
-
-        Token token = Token.Bearer("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IlVzdcOhcmlvIFBhZHLDo28iLCJuYW1laWQiOiIwIiwiREVGQVVMVF9VU0VSX0FVVEgiOiJ0cnVlIiwicm9sZSI6WyIzNTAiLCIxMDAiLCIxNTAiLCIyMDAiLCIyNTAiXSwibmJmIjoxNjA4NjY5MDQyLCJleHAiOjE5MjQwMjkwNDIsImlhdCI6MTYwODY2OTA0Mn0.3B71wvTArrsm4kBIJAb_J5fZUo1tnehg1XXsR5ArcOE");
         public GetNewEventsService(ILogger<GetNewEventsService> logger,
                                    SmartCardRepository smartCard,
                                    IHttpRequest httpRequest,
@@ -55,7 +51,7 @@ namespace AcApi.BackgroundServices
             {
                 _logger.LogDebug("New Event found");
 
-                await SendEvent(uri, result, token);
+                await SendEvent(result);
                 _logger.LogInformation($"Post content: {result}.");
             }
             return Task.CompletedTask;
@@ -63,12 +59,14 @@ namespace AcApi.BackgroundServices
 
         private async Task Countdown()
         {
-            await Task.Delay(TimeSpan.FromSeconds(5));
+            await Task.Delay(TimeSpan.FromSeconds(_configuration.TaskDelay));
         }
 
-        private async Task SendEvent(string uri, SmartCardDTO smartCard, Token token)
+        private async Task SendEvent(SmartCardDTO smartCard)
         {
-            var unitMessage = HttpRequest.Post<SmartCardDTO>(uri, smartCard, token, TimeSpan.FromSeconds(2));
+            Token token = Token.Bearer(_configuration.Token);
+
+            var unitMessage = HttpRequest.Post<SmartCardDTO>(_configuration.EndPointSCG, smartCard, token, TimeSpan.FromSeconds(_configuration.PostTimeOut));
             await Task.FromResult(unitMessage);
         }
     }

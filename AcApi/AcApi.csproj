@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BackgroundServices\Core\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="UIAutomationClient">
       <HintPath>..\..\..\..\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\UIAutomationClient.dll</HintPath>
     </Reference>
