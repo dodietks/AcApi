@@ -6,17 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\WeatherForecast.cs" />
-    <Compile Remove="Utils\HCNetSDK2.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utils\" />
+    <Folder Include="BackgroundServices\Core\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,5 +20,6 @@
     </Reference>
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

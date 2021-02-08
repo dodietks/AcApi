@@ -1,16 +1,15 @@
-﻿using AcApi.Models.Enum;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace AcApi.Models
 {
-    public class LoginOptions
+    public class Gate
     {
-        public const string ACS = "ACS";
+        public const string Gates = "Gates";
+
+        public string GateId { get; set; }
         public string Ip { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
